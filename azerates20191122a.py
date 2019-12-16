@@ -1,6 +1,6 @@
 """
 
-RANDOM.
+simple RANDOM.
 
 """
 
@@ -8,14 +8,17 @@ import random
 
 
 def coin_toss(n: int):
-    n = int(n)
-    coin = ['head', 'tail']
-    coin_counter = 0
+    if n > 0:
+        n = int(n)
+    else:
+        raise ValueError('Invalid Input')
+    coin = [1, 0]
+    counter = 0
     for i in range(n):
         toss = random.choice(coin)
-        if toss == 'head':
-            coin_counter += 1
-    return coin_counter / n
+        if toss:
+            counter += 1
+    return counter / n
 
 
 def dice_roll(n: int, dicesize=6):
@@ -59,7 +62,8 @@ for _ range(t):
 return cases
 
 
-note that Counter function allows only if it is hashable(since lists can be modified anytime). In short, lists and dictionaries cannot be counted, tuples can.
+note that Counter function allows only if it is hashable(since lists can be modified anytime).
+In short, lists and dictionaries cannot be counted, tuples can.
 
 
 Let H=1, T=0 be. then coin = [ 'H', 'T' ] -> [1,0].
@@ -75,10 +79,10 @@ for i in range(trials):
 coin_event_counts = Counter(cases)
 """
 
-if __name__ == '__main__':
-    print(coin_toss(900000))
-    print(dice_roll(900000, 6))
-    print(dice_roll(10000, pow(2, 4)))
+# if __name__ == '__main__':
+#     print(coin_toss(900000))
+#     print(dice_roll(900000, 6))
+#     print(dice_roll(10000, pow(2, 4)))
 
 # roll 2 dices, probability of 8. (2 6), (3 5), (4 4), (5 3), (6 2) -> 5/36.
 
