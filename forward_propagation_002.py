@@ -1,4 +1,7 @@
 """
+WARNING : THESE CODES WERE WRITTEN ON NOTEPAD++ TO EDIT&INTEGRATE THEM RELATIVELY LIGHTER. HENCE PEP MIGHT HAVE NOT BEEN KEPT WELL.
+(I'M GOING TO WRITE CODES ON PYCHARM ENVIROMENT FROM NOW ON)
+
 
 forward propagation 002
 
@@ -8,6 +11,7 @@ Let us assume that the former file 'forward_propagation_001' is stored at same d
 2. place 'sample_weight.pkl' as well. 
 
 We are going to calculate accuracy with neural network we defined.
+
 
 """
 
@@ -64,8 +68,8 @@ def accuracy(predicted, answers, ntw, f_prop):
     return cnt / len(predicted)
 
 if __name__ == '__main__':
-	ntw = init_network()
-	print(ntw.keys())  # dict_keys(['b2', 'W1', 'b1', 'W2', 'W3', 'b3'])
+    ntw = init_network()
+    print(ntw.keys())  # dict_keys(['b2', 'W1', 'b1', 'W2', 'W3', 'b3'])
     print(ntw['W1'].shape)  # 784 * 50
     print(ntw['W2'].shape)  # 50 * 100
     print(ntw['W3'].shape)  # 100 * 10
@@ -81,8 +85,7 @@ if __name__ == '__main__':
 	
 	Since the weighted matrix ends at 3, We can guess that the output will have 10 columns. In classification, it means it will be one of 10 characteristics.
 	"""
-	
-	(X_train, y_train), (X_test, y_test) = load_mnist(normalize=True, flatten=True, one_hot_label=False)
+    (X_train, y_train), (X_test, y_test) = load_mnist(normalize=True, flatten=True, one_hot_label=False)
     print(X_train.shape)  # 60000, 784.
     print(y_train.shape)  # 60000, 1
     print(X_test.shape)  # 10000, 784
@@ -101,7 +104,7 @@ if __name__ == '__main__':
 	Our goal is to predict Test data as accurate as possible. To do that, we need to initialize neural network, which we already have done, input training and test data for it.
 	
 	"""
-	y_pred = forward_propagation(ntw, X_test)
+    y_pred = forward_propagation(ntw, X_test)
 	
 	# Now we can calculate accuracy.
 	
