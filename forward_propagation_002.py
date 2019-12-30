@@ -140,7 +140,7 @@ if __name__ == '__main__':
 	
 	replace X_test = predicted, y_test = answers.
 	"""
-	
+        
 	# example.
 	acr2 = accuracy(X_test, y_test, ntw=init_network(), f_prop=forward_propagation)
 	print(acr2)  # 0.9352.
