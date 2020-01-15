@@ -24,3 +24,9 @@ def arctan(x):
 
 def identity(x):
     return x
+
+# added soft max : 20/1/15.
+def softmax(a):
+    c = np.max(a)
+    a_prime = np.exp(a-c)
+    return a_prime / np.sum(a_prime)
