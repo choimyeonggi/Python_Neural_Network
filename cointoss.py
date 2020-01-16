@@ -17,3 +17,4 @@ def coin_toss(n: int):
 
 if __name__ == '__main__':
     print(coin_toss(100))
+    

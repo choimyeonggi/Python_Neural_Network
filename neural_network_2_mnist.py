@@ -1,7 +1,9 @@
 """
 MNIST
 
-2020 01 15 JJH
+2020 01 16 JJH
+
+We are going to figure accuracy by neural network structure, with weights given by author. (sample_weights.pkl).
 """
 
 import os, sys
@@ -131,6 +133,65 @@ def accuracy_1(predicted, answers, network, f_prop):
         raise ValueError('Two parameters must have same length.')
     return cnt / len(predicted)
 
+# modified from DeepLearning/ch03/azerates20191226c.py
+def mini_batch(network, x, batch_size):  # Send x to network, divided by batch_size.
+    y_pred = np.array([])  # a numpy array to store predicted values.
+    # Now divide x by batch_size(natural number), put it into forward propagation (at this time, predict).
+    for i in range(0, len(x), batch_size):
+        x_batch = x[i:(i + batch_size)]
+        """
+See that
+
+x = 60000
+batch_size=3000
+for i in range(0, x, batch_size):
+    print(i)
+
+result:
+0
+3000
+6000
+9000
+12000
+15000
+18000
+21000
+24000
+27000
+30000
+33000
+36000
+39000
+42000
+45000
+48000
+51000
+54000
+57000
+
+hence the lists will be like below.
+x_batch = x[0:3000]
+x_batch = x[3000:6000]
+x_batch = x[6000:9000]
+x_batch = x[9000:12000]
+x_batch = x[12000:15000]
+x_batch = x[15000:18000]
+x_batch = x[18000:21000]
+x_batch = x[21000:24000]
+x_batch = x[24000:27000]
+x_batch = x[27000:30000]
+...
+        """
+        y_hat = predict(network, x_batch)  # We have used neural network forward propagation with whole dataset. But this batching strategy helps computer to input and output data more efficiently(maybe prevents bottleneck effect)
+        predictions = np.argmax(y_hat, axis=1)  # find index number of maximum by row(axis=1).
+
+        y_pred = np.append(y_pred, predictions)  # add 'predictions' to y_pred which we initialised at the start of the function. np.append prevents array duplication, where built-in append can't.
+    return y_pred  # (len(x),)
+
+def accuracy_boolean(true, pred):
+    return np.mean(true == pred)
+
+
 if __name__ == '__main__':
 
     # Now let us see source code of load_mnist.
@@ -227,4 +288,17 @@ At least, it seems that our function works well, no calculation error.
 
     accuracy_f = accuracy_1(predicted=x_test, answers=y_test, network=sample_weight, f_prop=predict)
     print('accuracy by accuracy_1 function =', accuracy_f)  # accuracy by accuracy_1 function = 0.9352
+
+
+    # Now let us test our mini_batch.
+
+    y_predicted = mini_batch(network=sample_weight, x=x_test, batch_size=10)
+    print(y_predicted)  # [7. 2. 1. ... 4. 5. 6.]. how about accuracy?
+
+    accuracy_b = accuracy_1(predicted=y_predicted, answers=y_test, network=sample_weight, f_prop=predict)
+    print('accuracy(mini batch) by accuracy_1 function =', accuracy_b)  # accuracy(mini batch) by accuracy_1 function = 0.0004 ?? I think, there's something wrong with it.
+
+    accuracy_b_2 = accuracy_boolean(true=y_test, pred=y_predicted)
+    print('accuracy(mini batch) by accuracy_boolean function =', accuracy_b_2)  #accuracy(mini batch) by accuracy_boolean function = 0.9352
+
     
