@@ -10,6 +10,7 @@ import pandas as pd
 from collections import OrderedDict
 import activation_functions_module as afm
 import neural_network_1 as nn_1
+import matplotlib as plt
 
 # Last time we made a single layer neural network. Refer neural_network_1.py for further comments.
 
