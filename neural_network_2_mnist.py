@@ -25,7 +25,7 @@ print('relative mnist path =',os.path.join('..', '..', '..', 'PycharmProjects', 
 # Now let's set dataset path to import mnist.py and others.
 dataset_path = os.path.join('..', '..', '..', 'PycharmProjects', 'DeepLearning', 'dataset').replace('\\', '/')
 
-sys.path.append(dataset_path)
+sys.path.append(dataset_path)   
 
 sample_weight_path = os.path.join('..', '..', '..', 'PycharmProjects', 'DeepLearning', 'ch03', 'sample_weight.pkl').replace('\\', '/')
 
