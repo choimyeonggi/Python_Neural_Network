@@ -1,0 +1,109 @@
+"""
+Numerical differential.
+
+Since it is impossible to obtain analytic form of numerical functions in computer, using numerically approximated form is natural.
+
+In order to differentiate a well defined function fn(x), then for given h=1e-4,
+
+fn(x)/dx = (fn(x+h) - fn(x))/h.
+
+in other words,
+
+fn(x)/dx = (fn(x-h) - fn(x))/h.
+
+the former, which we know very well, is called front differentiation, the latter is called backward differentiation.
+
+in order to improve accuracy, use two points : x+h, x-h. then the differential will be
+
+fn(x)/dx = (fn(x+h)-fn(x-h))/(2*h).
+"""
+
+import numpy as np
+
+def numerical_differential(function, point):
+    """Suppose that 'function' variable is based on R2 space, and well defined smooth.
+refer from DeepLearning/ch04/azerates20191227d.py
+    """
+    h = 1e-4
+    return (function(point+h) - function(point-h))/(2*h)
+
+"""
+Imagine that we are going to handle multi-variable function, and we want to get partial differential.
+
+Set
+def function_1(x, y):
+    return pow(x, 2) + pow(y, 2), which means function(x, y) = x^2 + y^2.
+
+then partial differential is like
+
+function_1/dx = 2x
+function_1/dy = 2y
+
+in other word we can express function_1 like this
+
+def function_1(x:array):
+    return np.sum(pow(x,2)) -> suppose that x is a numpy array, i.e. x=np.array([1,2,3,4, ... ]).
+    then pow(x,2) means an array that has powered element w.r.t x. i.e. pow(x,2)=np.array([1, 4, 9, 16, ... ])
+
+in order to calculate partial differentail w.r.t x[0], suppose that x=[x_1, x_2] then the formula shall be
+
+(function([x_1, x_2] + [h, 0]) - function([x_1, x_2] - [h, 0])) / (2 * [h, 0])
+
+then partial differential for x[1] is clear :
+
+(function([x_1, x_2] + [0, h]) - function([x_1, x_2] - [0, h])) / (2 * [0, h])
+
+now we got a clue for coding interpretation : h=1e-4 -> [ ... h ... ]
+
+let us make prototype for partial differential.
+"""
+# version 1.
+def partial_differential_1(function, point, index, delta=1e-4):
+    """suppose that point=[x1, x2], and index=1 (natural number). We'd like to return (function([x1, x2]+[0, delta]) - function([x1, x2] - [0, delta]))/(2*[0, delta]).
+then create an empty array that has same length w.r.t point
+
+    """
+    point = np.array(point).astype(np.float)  # for some unknown reason, we must transform array into float types.
+    delta_array = np.zeros_like(point)
+    delta_array[index] = delta
+    print('initialised delta_array =', delta_array)
+    print('point to be differentiated =', point)
+    print(point+delta_array, point-delta_array)
+    #partial differential at index.
+    partial_gradient = (function(point + delta_array) - function(point - delta_array)) / (2*delta)
+    return partial_gradient
+
+def quadratic_1(points):
+    """
+    points : array.
+simple quadratic. no specific coefficients. np.sum(points) = x1^2 + x2^2 + x3^2 + ...
+->
+quadratic =[]
+for i in range(len(points)):
+    point_powered = power(points[i], 2)
+    quadratic.append(point_powered)
+
+    """
+    quadratic =[]
+    for i in range(len(points)):
+        point_powered = pow(points[i], 2)
+        quadratic.append(point_powered)
+
+    return np.array(quadratic)
+
+
+if __name__ == '__main__':
+    x = [1, 2, 3, 4, 5, 6, 7]
+    x_2 = quadratic_1(points=x)
+    print(x_2) # [1, 4, 9, 16, 25, 36, 49]
+    y = np.array(x)
+    y_2 = quadratic_1(points=y)
+    print(y_2) # [1, 4, 9, 16, 25, 36, 49]
+
+    diff_1 = partial_differential_1(function=quadratic_1, point=[3, 4, 5], index=1)
+    print('diff_1 =', diff_1)
+
+    z = np.zeros_like(x)
+    print(z)
+    z[1] = 1
+    print(z)
