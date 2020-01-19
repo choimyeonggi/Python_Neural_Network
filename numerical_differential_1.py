@@ -1,7 +1,7 @@
 """
 Numerical differential.
 
-Since it is impossible to obtain analytic form of numerical functions in computer, using numerically approximated form is natural.
+Since it is impossible to obtain exact analytic form of numerical functions in computer, using numerically approximated form is natural.
 
 In order to differentiate a well defined function fn(x), then for given h=1e-4,
 
@@ -59,7 +59,8 @@ let us make prototype for partial differential.
 """
 # version 1.
 def partial_differential_1(function, point, index, delta=1e-4):
-    """suppose that point=[x1, x2], and index=1 (natural number). We'd like to return (function([x1, x2]+[0, delta]) - function([x1, x2] - [0, delta]))/(2*[0, delta]).
+    """
+suppose that point=[x1, x2], and index=1 (natural number). We'd like to return (function([x1, x2]+[0, delta]) - function([x1, x2] - [0, delta]))/(2*[0, delta]).
 then create an empty array that has same length w.r.t point
 
     """
@@ -72,6 +73,52 @@ then create an empty array that has same length w.r.t point
     #partial differential at index.
     partial_gradient = (function(point + delta_array) - function(point - delta_array)) / (2*delta)
     return partial_gradient
+
+# Can we script more generalised version of partial_differential_1?
+
+#version 2.
+def partial_differential_2(function, point, delta=1e-4):
+    """
+Suppose that point=[x1, x2], then we'd like to return each partial differential set, i.e. tuple. How can we iterate it?
+
+It seems like delta_array[index], and partial gradient must be modified.
+    """
+    point = np.array(point).astype(np.float)
+    delta_array = np.zeros_like(point)
+    """
+Iteration 1: delta_array[0] = delta -> partial_gradient[0] = (function(point + delta_array) - function(point - delta_array)) / (2*delta) -> delta_array[0] = 0
+Iteration 2: delta_array[1] = delta -> partial_gradient[1] = (function(point + delta_array) - function(point - delta_array)) / (2*delta) -> delta_array[1] = 0
+Iteration 3: delta_array[0] = delta -> partial_gradient[0] = (function(point + delta_array) - function(point - delta_array)) / (2*delta) -> delta_array[0] = 0
+...
+
+-> create a empty list 'partial gradient'
+    """
+    partial_gradient = []
+    # iteration length : length of point.
+    for i in range(len(point)):
+        delta_array[i] = delta
+        gradient = (function(point + delta_array) - function(point - delta_array)) / (2*delta)
+        partial_gradient.append(gradient)
+        delta_array[i] = 0
+    return partial_gradient
+
+# what if we want to return gradient tuple?
+
+def partial_differential_3(function, point, delta=1e-4, gradient_set=False):
+    point = np.array(point).astype(np.float)
+    delta_array = np.zeros_like(point)
+    partial_gradient = []
+    for i in range(len(point)):
+        delta_array[i] = delta
+        gradient = (function(point + delta_array) - function(point - delta_array)) / (2*delta)  # the result is array.
+        if gradient_set:
+            partial_gradient.append(gradient[i]) # -> we can make this as option parameter.
+        else:
+            partial_gradient.append(gradient)
+        delta_array[i] = 0
+    partial_gradient = tuple(partial_gradient)
+    return partial_gradient
+
 
 def quadratic_1(points):
     """
@@ -101,9 +148,32 @@ if __name__ == '__main__':
     print(y_2) # [1, 4, 9, 16, 25, 36, 49]
 
     diff_1 = partial_differential_1(function=quadratic_1, point=[3, 4, 5], index=1)
-    print('diff_1 =', diff_1)
+    print('diff_1 =', diff_1) # [0. 8. 0.]
 
     z = np.zeros_like(x)
-    print(z)
+    print(z) # [0 0 0 0 0 0 0]
     z[1] = 1
-    print(z)
+    print(z) # [0 1 0 0 0 0 0]
+
+    # let us test partial_differential_2.
+
+    diff_2 = partial_differential_2(function=quadratic_1, point=[3, 4, 5])
+    print('diff_2 =', diff_2) # [array([6., 0., 0.]), array([0., 8., 0.]), array([ 0.,  0., 10.])]
+    print('diff_2[1] =', diff_2[1]) # [0. 8. 0.] == diff_1
+
+    # what if we differ delta by 1e-6? hope that the result won't be changed.
+
+    print(partial_differential_2(function=quadratic_1, point=[3, 4, 5], delta=1e-6))  # [array([6., 0., 0.]), array([0., 8., 0.]), array([ 0.,  0., 10.])]
+
+    # Can we occur underflow?
+
+    print(partial_differential_2(function=quadratic_1, point=[3, 4, 5], delta=1e-8))   # maybe underflow? [array([5.99999996, 0.        , 0.        ]), array([0.        , 7.99999995, 0.        ]), array([0.        , 0.        , 9.99999994])]
+
+    print(partial_differential_2(function=quadratic_1, point=[3, 4, 5], delta=1e-10))  # [array([6.0000005, 0.       , 0.       ]), array([0.        , 8.00000066, 0.        ]), array([ 0.        ,  0.        , 10.00000083])]
+
+    # delta=1e-4 is enough. never the more, the less.
+
+    # partial_differential_3 test.
+
+    print('partial_differential_3 test, gradient_set=False =',partial_differential_3(function=quadratic_1, point=[1, 2, 3, 4, 5], delta=1e-2, gradient_set=False)) # (array([2., 0., 0., 0., 0.]), array([0., 4., 0., 0., 0.]), array([0., 0., 6., 0., 0.]), array([0., 0., 0., 8., 0.]), array([ 0.,  0.,  0.,  0., 10.]))
+    print('partial_differential_3 test, gradient_set=True =',partial_differential_3(function=quadratic_1, point=[1, 2, 3, 4, 5], delta=1e-2,  gradient_set=True)) # (2.0000000000000018, 3.999999999999937, 5.999999999999872, 7.9999999999998295, 9.999999999999787)
