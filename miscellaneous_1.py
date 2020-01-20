@@ -100,7 +100,7 @@ class single_layer_1:
         #print('x =', self.x, self.x.shape[0])
         #print('w =', self.w, self.w.shape)
         #print('b =', self.b, self.b.shape)
-
+    
     def product(self):
         # output = self.x.dot(self.w) + self.b
         output = self.activator(self.x.dot(self.w) + self.b)

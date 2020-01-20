@@ -119,6 +119,28 @@ def partial_differential_3(function, point, delta=1e-4, gradient_set=False):
     partial_gradient = tuple(partial_gradient)
     return partial_gradient
 
+def partial_gradient(function, point, delta=1e-4, verbose=False):
+    """
+parametres:
+function : that which we want to get gradients.
+point : at which we want to calculate. doesn't need to input as numpy array, float form as default (the function will handle it)
+delta: infinitesimal value. 1e-4 for default.
+verbose : prints gradient vector if needed. False for default.
+
+return : gradient list, type : array. e.g. [1, 2, 3, 4, 5].
+    """
+    point = np.array(point).astype(np.float)
+    delta_array = np.zeros_like(point)
+    gradient_list = []
+    for i in range(len(point)):
+        delta_array[i] = delta
+        gradient = (function(point + delta_array) - function(point - delta_array)) / (2*delta)
+        gradient_list.append(gradient[i])
+        delta_array[i] = 0
+    if verbose:
+        print('gradient result =', gradient_list)
+    return gradient_list
+
 
 def quadratic_1(points):
     """
@@ -156,7 +178,7 @@ if __name__ == '__main__':
     print(z) # [0 1 0 0 0 0 0]
 
     # let us test partial_differential_2.
-
+    
     diff_2 = partial_differential_2(function=quadratic_1, point=[3, 4, 5])
     print('diff_2 =', diff_2) # [array([6., 0., 0.]), array([0., 8., 0.]), array([ 0.,  0., 10.])]
     print('diff_2[1] =', diff_2[1]) # [0. 8. 0.] == diff_1
@@ -177,3 +199,7 @@ if __name__ == '__main__':
 
     print('partial_differential_3 test, gradient_set=False =',partial_differential_3(function=quadratic_1, point=[1, 2, 3, 4, 5], delta=1e-2, gradient_set=False)) # (array([2., 0., 0., 0., 0.]), array([0., 4., 0., 0., 0.]), array([0., 0., 6., 0., 0.]), array([0., 0., 0., 8., 0.]), array([ 0.,  0.,  0.,  0., 10.]))
     print('partial_differential_3 test, gradient_set=True =',partial_differential_3(function=quadratic_1, point=[1, 2, 3, 4, 5], delta=1e-2,  gradient_set=True)) # (2.0000000000000018, 3.999999999999937, 5.999999999999872, 7.9999999999998295, 9.999999999999787)
+
+    # partial gradient test
+
+    partial_gradient(function=quadratic_1, point=[1, 2, 3, 4, 5, 6, 7], delta=1e-2, verbose=True) # [2.0000000000000018, 3.999999999999937, 5.999999999999872, 7.9999999999998295, 9.999999999999787, 11.999999999999744, 13.999999999999702]
