@@ -18,4 +18,11 @@ import numerical_differential_1 as nf1
 
 for i in inspect.getmembers(nf1, inspect.isfunction):
     print(i)
-# we are going to use function quadratic_1 
+# we are going to use function quadratic_1, partial_gradient.
+
+print(inspect.getsource(nf1.partial_gradient))
+
+"""
+The basic concept of gradient descent is simple : in analytics, for a well-defined smooth function F, its local extreme values are occured at which its derivative becomes 0.
+For example, suppose that  F = pow(x, 3) +9 * pow(x, 2) -9 * x + 7, then its local extreme values are occured at x = -3±2*sqrt(3), remind that 
+"""
