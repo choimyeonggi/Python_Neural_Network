@@ -134,11 +134,13 @@ return : gradient list, type : array. e.g. [1, 2, 3, 4, 5].
     gradient_list = []
     for i in range(len(point)):
         delta_array[i] = delta
+        #print('delta array=', delta_array)
         gradient = (function(point + delta_array) - function(point - delta_array)) / (2*delta)
         gradient_list.append(gradient[i])
         delta_array[i] = 0
     if verbose:
         print('gradient result =', gradient_list)
+    #print('delta array last check=', delta_array)
     return np.array(gradient_list)
 
 
@@ -202,10 +204,10 @@ if __name__ == '__main__':
 
     # partial gradient test
 
-    partial_gradient(function=quadratic_1, point=[1, 2, 3, 4, 5, 6, 7], delta=1e-2) # [2.0000000000000018, 3.999999999999937, 5.999999999999872, 7.9999999999998295, 9.999999999999787, 11.999999999999744, 13.999999999999702]
+    #partial_gradient(function=quadratic_1, point=[1, 2, 3, 4, 5, 6, 7], delta=1e-2, verbose=True) # [2.0000000000000018, 3.999999999999937, 5.999999999999872, 7.9999999999998295, 9.999999999999787, 11.999999999999744, 13.999999999999702]
 
-    matrix_1 = partial_gradient(function=quadratic_1, point=np.array([[1, 2, 3], [4, 5, 6]]))
-    print(matrix_1)
-    matrix_2 = np.array([[1, 2, 3], [4, 5, 6]])
-    print(matrix_2)
+    matrix_1 = partial_gradient(function=lambda x : pow(x, 3), point=np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+    print('matrix_1 =',matrix_1)
+    #matrix_2 = np.array([[1, 2, 3], [4, 5, 6]])
+    #print(matrix_2)
     
