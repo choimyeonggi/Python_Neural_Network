@@ -74,9 +74,10 @@ def cross_entropy(predicted, trues, delta=1e-7):
     now we don't need 2 functions to run cross entropy.
 
 """
-def loss_cross_entropy(predicted, trues, delta=1e-7):
-    print('loss_cross_entropy, input length is =', len(predicted))
-    print('the dimension of input data is =', predicted.ndim)
+def loss_cross_entropy(predicted, trues, delta=1e-7, check=False):
+    if check:
+        print('loss_cross_entropy, input length is =', len(predicted))
+        print('the dimension of input data is =', predicted.ndim)
     if predicted.ndim == 1:
         y = -np.sum(trues * np.log(predicted + delta))
     elif predicted.ndim == 2:
