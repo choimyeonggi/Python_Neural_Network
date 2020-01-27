@@ -8,15 +8,15 @@ This is an extension of basic_neuron_practice.py. refer pg 132 of 밑바닥부�
 import inspect, os
 
 for i in os.listdir(os.curdir):
-    print(i)
+   print(i)
     
 import basic_neuron_practice as bnp
 
-print('\n Source code of Basic neuron \n',inspect.getsource(bnp.Basic_neuron))
+#print('\n Source code of Basic neuron \n',inspect.getsource(bnp.Basic_neuron))
 # See that this function has scalar for rescale. Our extension is to modify it into vectors.
 import numerical_differential_1 as nf1
 
-print('list of functions in numerical_differential_1\n')
+#print('list of functions in numerical_differential_1\n')
 for i in inspect.getmembers(nf1, inspect.isfunction):
     print(i)
     """
@@ -29,8 +29,8 @@ for i in inspect.getmembers(nf1, inspect.isfunction):
     """
 # we are going to use function quadratic_1, partial_gradient.
 
-print('\n Source code of partial_gradient \n',inspect.getsource(nf1.partial_gradient))
-print('\n Source code of quadratic_1 \n',inspect.getsource(nf1.quadratic_1))
+#print('\n Source code of partial_gradient \n',inspect.getsource(nf1.partial_gradient))
+#print('\n Source code of quadratic_1 \n',inspect.getsource(nf1.quadratic_1))
 
 """
 The basic concept of gradient descent is simple : in analytics, for a well-defined smooth function F, its local extreme values are occured at which its derivative becomes 0.
@@ -161,6 +161,8 @@ point :
         string_expression += f'{i[1]} * x^{i[0]} + '
     if polyform:
         print('polynomial form =',string_expression[:-3].replace(' * x^0',''))
+    else:
+        string_expression = None
     return polysum
 
 
@@ -170,11 +172,18 @@ def numerical_gradient(f, x):
     grad = np.zeros_like(x)
     
     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
+    print('what is input f?', f)
+    print('what is input x? =', x)
     while not it.finished:
         idx = it.multi_index
+        print('what is idx? =', idx)
         tmp_val = x[idx]
+        print(f'tmp_val=x[idx] ', tmp_val)
         x[idx] = float(tmp_val) + h
+        print(f'x[idx] = float(tmp_val)+h =', x[idx])
+        print(f'x[idx]-tmp_val =', x[idx] - tmp_val)
         fxh1 = f(x) # f(x+h)
+        print('fxh1=f(x) check=', fxh1)
         
         x[idx] = tmp_val - h 
         fxh2 = f(x) # f(x-h)
@@ -186,20 +195,22 @@ def numerical_gradient(f, x):
     return grad
 
 if __name__ == '__main__':
+
+    
     np.random.seed(121)
     initial_point_1 = [3, 4]
     #function_1 = basic_gradient_descent_1(function=nf1.quadratic_1, point=initial_point_1, steps=1000)
-    function_2 = basic_gradient_descent_2(function=nf1.quadratic_1, point=initial_point_1)
-    print(function_2) # [5.04890207e-09 6.73186943e-09]
+    #function_2 = basic_gradient_descent_2(function=nf1.quadratic_1, point=initial_point_1)
+    #print(function_2) # [5.04890207e-09 6.73186943e-09]
 
     # what if we differ learning rate?
-    function_3 = basic_gradient_descent_2(function=nf1.quadratic_1, point=initial_point_1, learning_rate=0.1)
-    print('in case of learning rate=0.1', function_3) # [5.3799827e-21 5.1880768e-21] see that function_3 is better result than function_2.
+    #function_3 = basic_gradient_descent_2(function=nf1.quadratic_1, point=initial_point_1, learning_rate=0.1)
+    #print('in case of learning rate=0.1', function_3) # [5.3799827e-21 5.1880768e-21] see that function_3 is better result than function_2.
 
     # and we can even deliberately diverge it.
 
-    function_4 = basic_gradient_descent_2(function=nf1.quadratic_1, point=initial_point_1, learning_rate=10)
-    print('in case of learning_rate=10', function_4) # [ 1.91613251e+13 -1.26893162e+12]
+    #function_4 = basic_gradient_descent_2(function=nf1.quadratic_1, point=initial_point_1, learning_rate=10)
+    #print('in case of learning_rate=10', function_4) # [ 1.91613251e+13 -1.26893162e+12]
 
     # applying this gradient descent function, we can modify weights and biases as well.
     """
@@ -230,17 +241,17 @@ if __name__ == '__main__':
     #       print(net.W[i][j])
 
     ipt = [6, 9]
-    prd = net.predict(ipt)
-    print(f'preidcted weights with {ipt} =', prd) # [6, 9] = [-5.23499049 -4.68057002  7.20986188]
-    print('which index is biggest?', np.argmax(prd), prd[np.argmax(prd)]) # 2 7.20986187635347
+    #prd = net.predict(ipt)
+    #print(f'preidcted weights with {ipt} =', prd) # [6, 9] = [-5.23499049 -4.68057002  7.20986188]
+    #print('which index is biggest?', np.argmax(prd), prd[np.argmax(prd)]) # 2 7.20986187635347
     
     opt = [0, 0, 1]
-    ans = net.loss(x=ipt, t=opt)
-    print('ans = ', ans)
+    #ans = net.loss(x=ipt, t=opt)
+    #print('ans = ', ans)
 
     # let us test nf1.partial_gradient
-    print(polynomial_1(coefficients=[1, 2, 3, 4, 5], point=5))  #3711
-    polynomial_2(coefficients=[1, 2, 3, 4, 5], point=5, polyform=True) # polynomial form = 1 + 2 * x^1 + 3 * x^2 + 4 * x^3 + 5 * x^4
+    #print(polynomial_1(coefficients=[1, 2, 3, 4, 5], point=5))  #3711
+    #polynomial_2(coefficients=[1, 2, 3, 4, 5], point=5, polyform=True) # polynomial form = 1 + 2 * x^1 + 3 * x^2 + 4 * x^3 + 5 * x^4
 
     """
     xs = [i/100 for i in range(-1000, 1000)]
@@ -251,13 +262,14 @@ if __name__ == '__main__':
     plt.show()
     """
 
-    dW = net.dW(x=ipt, y=opt)
-    print(dW)
+    #dW = net.dW(x=ipt, y=opt)
+    #print(dW)
     
     """
 [[ 2.36273946e-05  4.11336811e-05 -6.47610774e-05]
  [ 3.54410949e-05  6.17005278e-05 -9.71416210e-05]]
     """
-    f_2 = lambda w : net.loss(ipt, opt)
+    f_2 = lambda b : net.loss(ipt, opt)
     dW_2 = numerical_gradient(f=f_2, x=net.W)
     print(dW_2)  # same result.
+
