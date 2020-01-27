@@ -8,16 +8,19 @@ import uuid
 def my_random_string(string_length=10):
     """Returns a random string of length string_length."""
     random = str(uuid.uuid4()) # Convert UUID format to a Python string.
-    random = random.upper() # Make all characters uppercase.
+    #random = random.upper() # Make all characters uppercase. Maybe we don't need this.
     random = random.replace("-","") # Remove the UUID '-'.
-    return random[0:string_length] # Return the random string.
+    return random[0:string_length] # Return the random string. -> this method returns always only upper or lower case + numbers. Hence, password security is releatively weak than id_generator.
 
 if __name__ == '__main__':
 
+#these random generators ignore numpy.random.seed().
+
     iteration_length = 16
+    password_size=8
     for i in range(iteration_length):
-        print(id_generator(size=iteration_length))
-        print(my_random_string(string_length=iteration_length))
+        print(id_generator(size=password_size))
+        print(my_random_string(string_length=password_size))
     """
 example:
 l3v6eKicqt1wNtwn
