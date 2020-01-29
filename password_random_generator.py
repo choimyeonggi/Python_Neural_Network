@@ -1,7 +1,12 @@
-import string
-import secrets
-def id_generator(size=6, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
-    return ''.join(secrets.choice(chars) for _ in range(size))
+import string, secrets, random
+
+def id_generator(size, chars=string.ascii_uppercase, punctuation=False, lower_case=False):
+    if punctuation:
+        chars += string.punctuation
+    if lower_case:
+        chars += string.ascii_lowercase
+    chars += string.digits * int(round(len(chars)/len(string.digits),0))
+    return ''.join(secrets.choice(chars) for _ in range(size)).replace(" ",random.choice(chars))  # Since punctuation contains whitespace " ", we must substitute it as another one.
 
 import uuid
 
@@ -17,42 +22,27 @@ if __name__ == '__main__':
 #these random generators ignore numpy.random.seed().
 
     iteration_length = 16
-    password_size=8
+    password_size = 16
     for i in range(iteration_length):
-        print(id_generator(size=password_size))
-        print(my_random_string(string_length=password_size))
+        print(id_generator(size=password_size, punctuation=True, lower_case=True))
     """
 example:
-l3v6eKicqt1wNtwn
-9279D2574CFB4448
-xSjZ0nR6KxOAXoGs
-700EE7A643BE46B1
-bqEf3S9ZUG2VF3Jo
-0BED524CBA834864
-d5NWvu52mGM2QDgj
-93E4E54B7FB24DB1
-dadjCHUmsONKRTHk
-2AD1C633F2264055
-ixoo0uelRhLL7mqS
-6CC563EB38FA4459
-1Yr7HomuKdpq3Ooc
-B0F61A1EB35D4F16
-X90d8Nyg6Sq3BTAg
-A4ACFA535FCA4ABE
-vv9vEh6WZMV1yts5
-83E9A3E890EF4019
-qz5pEzfD1dimzxv1
-8098A17F50E54DE7
-0KKKdgSUmKHNZlFN
-E205621FB09A4A0A
-6N1l6wottQXqPpnb
-7EBE7783B9824539
-crqITGsh4yP1py0m
-869B2E5DBDA04D81
-jMvueqyqPyzTWeUx
-F87E73DF6409453D
-71IJuqyZPtpks0zm
-975CF5A155DD4B2E
-ecxPrrx0POmSnI8h
-9AD2E6B585AD4225
+;-na5e}4169T16D9
+WLx^0WTANA$M1B3I
+8562`J?51j]4M2ZE
+[9>87E(w538B)9!0
+2;3(>E)e9F5,5047
+5Y~^933H25<07576
++968#050U8G2j20e
+7Y0RExUJ310,83R0
+?D6E)55m_ZE2*e3p
+G}38a+9>f692]q?o
+13@0]0T1i6627p!6
+aj32T96w9i=z0M33
+OeK{94`kL9[3z51h
+;53gQ34R=T>d\j;t
+G2X3900`{<2I9457
+06*IC.d"0g`jY9^7
     """
+    
+    

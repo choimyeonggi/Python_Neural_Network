@@ -172,18 +172,18 @@ def numerical_gradient(f, x):
     grad = np.zeros_like(x)
     
     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
-    print('what is input f?', f)
-    print('what is input x? =', x)
+    #print('what is input f?', f)
+    #print('what is input x? =', x)
     while not it.finished:
         idx = it.multi_index
-        print('what is idx? =', idx)
+        #print('what is idx? =', idx)
         tmp_val = x[idx]
-        print(f'tmp_val=x[idx] ', tmp_val)
+        #print(f'tmp_val=x[idx] ', tmp_val)
         x[idx] = float(tmp_val) + h
-        print(f'x[idx] = float(tmp_val)+h =', x[idx])
-        print(f'x[idx]-tmp_val =', x[idx] - tmp_val)
+        #print(f'x[idx] = float(tmp_val)+h =', x[idx])
+        #print(f'x[idx]-tmp_val =', x[idx] - tmp_val)
         fxh1 = f(x) # f(x+h)
-        print('fxh1=f(x) check=', fxh1)
+        #print('fxh1=f(x) check=', fxh1)
         
         x[idx] = tmp_val - h 
         fxh2 = f(x) # f(x-h)
